@@ -1,0 +1,44 @@
+{
+  "workbench.colorCustomizations": {
+    "activityBar.activeBackground": "#04a7cb",
+    "activityBar.background": "#04a7cb",
+    "activityBar.foreground": "#e7e7e7",
+    "activityBar.inactiveForeground": "#e7e7e799",
+    "activityBarBadge.background": "#bc049a",
+    "activityBarBadge.foreground": "#e7e7e7",
+    "commandCenter.border": "#e7e7e799",
+    "sash.hoverBorder": "#04a7cb",
+    "statusBar.background": "#037e99",
+    "statusBar.foreground": "#e7e7e7",
+    "statusBarItem.hoverBackground": "#04a7cb",
+    "statusBarItem.remoteBackground": "#037e99",
+    "statusBarItem.remoteForeground": "#e7e7e7",
+    "titleBar.activeBackground": "#037e99",
+    "titleBar.activeForeground": "#e7e7e7",
+    "titleBar.inactiveBackground": "#037e9999",
+    "titleBar.inactiveForeground": "#e7e7e799"
+  },
+  "peacock.color": "#037E99",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+  "editor.formatOnSave": true,
+  "editor.tabSize": 2,
+  "files.watcherExclude": {
+    "**/dist": true,
+    "**/coverage": true,
+    "**/node_modules": true
+  },
+  "explorer.fileNesting.patterns": {
+    "*.js": "${capture}.js.map, ${capture}.min.js, ${capture}.mjs, ${capture}.mjs.map, ${capture}.d.ts",
+    "*.ts": "${capture}.config.ts, ${capture}.test.ts, ${capture}.util.ts, ${capture}.md",
+    "*.jsx": "${capture}.js",
+    "*.tsx": "${capture}.ts",
+    "tsconfig.json": "tsconfig.*.json",
+    "package.json": "package-lock.json, yarn.lock",
+    ".eslintrc.json": ".eslintignore",
+    ".prettierrc.json": ".prettierignore",
+    ".editorconfig": ".cspell.json, .nvmrc",
+    "commitlint.config.js": ".commitlintrc.json"
+  }
+}

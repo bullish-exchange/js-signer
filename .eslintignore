@@ -1,0 +1,8 @@
+/dist/**
+/coverage/**
+/tmp/**
+!.eslintrc.js
+
+rollup.config.js
+tsconfig.json
+commitlint.config.js
