@@ -1,6 +1,7 @@
 import cleaner from 'rollup-plugin-cleaner'
 import dts from 'rollup-plugin-dts'
 import esbuild from 'rollup-plugin-esbuild'
+import { visualizer } from 'rollup-plugin-visualizer'
 
 import { main, dependencies } from './package.json'
 import { compilerOptions } from './tsconfig.json'
@@ -12,24 +13,31 @@ const isProd = env === 'production'
 /** package variables */
 const name = main.replace(/\.js$/, '')
 
-/** esbuild config */
-const esbuildConfig = {
-  minify: isProd,
-  target: 'esnext',
-  define: {
-    __VERSION__: '"x.y.z"',
+/** esbuild, cleaner, visualizer config */
+const config = {
+  esbuild: {
+    minify: isProd,
+    target: 'esnext',
+    define: {
+      __VERSION__: '"x.y.z"',
+    },
+    loaders: {
+      '.json': 'json',
+    },
   },
-  loaders: {
-    // Add .json files support
-    '.json': 'json',
+  visualizer: {
+    emitFile: true,
+    file: 'stats.html',
+    template: 'treemap',
+  },
+  cleaner: {
+    targets: [compilerOptions.outDir],
   },
 }
 
-const cleanerPluginDist =
-  isProd &&
-  cleaner({
-    targets: [compilerOptions.outDir],
-  })
+const cleanerPluginDist = isProd && cleaner(config.cleaner)
+
+const visualizePluginDist = !isProd && visualizer(config.visualizer)
 
 const external = Object.keys(dependencies || {})
 
@@ -40,7 +48,7 @@ const bundle = config => ({
 })
 
 const configSrc = bundle({
-  plugins: [cleanerPluginDist, esbuild(esbuildConfig)],
+  plugins: [cleanerPluginDist, esbuild(config.esbuild), visualizePluginDist],
   output: [
     {
       file: `${name}.js`,

@@ -39,6 +39,10 @@
     ".eslintrc.json": ".eslintignore",
     ".prettierrc.json": ".prettierignore",
     ".editorconfig": ".cspell.json, .nvmrc",
-    "commitlint.config.js": ".commitlintrc.json"
-  }
+    "commitlint.config.js": ".commitlintrc.json",
+    ".gitignore": ".gitattributes",
+    // "rollup.config.js": "tsconfig.json, jest.config.json",
+    "README.md": "LICENSE"
+  },
+  "todohighlight.keywords": ["eslint-disable-next-line"]
 }
