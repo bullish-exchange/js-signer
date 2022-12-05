@@ -7,4 +7,6 @@ import RIPEMD160 from 'ripemd160'
 
 export const crypto = typeof window !== 'undefined' ? window.crypto : webcrypto
 
-export { BN, BNInput, Buffer, EC, RIPEMD160, sha256 }
+type GenKeyPairOptions = EC.GenKeyPairOptions
+
+export { BN, BNInput, Buffer, EC, GenKeyPairOptions, RIPEMD160, sha256 }

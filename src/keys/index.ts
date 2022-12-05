@@ -1,3 +1,5 @@
+export { generateKeyPair, generateWebCryptoKeyPair, generateWebCryptoStringKeyPair } from './keyUtils'
 export { PrivateKey } from './PrivateKey'
 export { PublicKey } from './PublicKey'
 export { Signature } from './Signature'
+export { getTypeFromPublicKeyString, isPrivateKeyValid, isPublicKeyValid } from './verify'

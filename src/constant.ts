@@ -5,15 +5,8 @@ export const ALGORITHM_HASH = 'SHA-256'
 export const ELLIPTIC_CURVE_K1 = 'secp256k1'
 export const ELLIPTIC_CURVE = 'p256'
 
-export const DER_HEX_PREFIX_PUBLIC = '3059301306072a8648ce3d020106082a8648ce3d030107034200'
-
-export const DER_HEX_PREFIX_PRIVATE =
-  '308187020100301306072a8648ce3d020106082a8648ce3d030107046d306b0201010420'
-
 export const base58Chars = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz'
 export const base64Chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
-
-export const DER_HEX_SEPERATOR_PRIVATE = 'a144034200'
 
 export enum KEY_FORMAT {
   PKCS8 = 'pkcs8',

@@ -9,8 +9,6 @@ import {
   ALGORITHM_CURVE,
   ALGORITHM_HASH,
   ALGORITHM_NAME,
-  DER_HEX_PREFIX_PRIVATE,
-  DER_HEX_SEPERATOR_PRIVATE,
   ELLIPTIC_CURVE,
   ELLIPTIC_CURVE_K1,
   ERRORS,
@@ -25,6 +23,9 @@ import {
   stringToArray,
   stringToPrivateKey,
 } from '../numeric'
+
+const DER_HEX_PREFIX = '308187020100301306072a8648ce3d020106082a8648ce3d030107046d306b0201010420'
+const DER_HEX_SEPERATOR = 'a144034200'
 
 /** Represents/stores a private key and provides easy conversion for use with `elliptic` lib */
 export class PrivateKey implements AbstractPrivateKey {
@@ -58,8 +59,8 @@ export class PrivateKey implements AbstractPrivateKey {
     const extractedArrayBuffer = await crypto.subtle.exportKey(KEY_FORMAT.PKCS8, privKey)
     const extractedDecoded = arrayToString(extractedArrayBuffer)
     const derHex = Buffer.from(extractedDecoded, 'binary').toString('hex')
-    let privateKeyHex = derHex.replace(DER_HEX_PREFIX_PRIVATE, '')
-    privateKeyHex = privateKeyHex.substring(0, privateKeyHex.indexOf(DER_HEX_SEPERATOR_PRIVATE))
+    let privateKeyHex = derHex.replace(DER_HEX_PREFIX, '')
+    privateKeyHex = privateKeyHex.substring(0, privateKeyHex.indexOf(DER_HEX_SEPERATOR))
     const privateKeyEc = ec.keyFromPrivate(privateKeyHex, 'hex')
     return PrivateKey.fromElliptic(privateKeyEc, KeyType.r1, ec)
   }
@@ -90,7 +91,7 @@ export class PrivateKey implements AbstractPrivateKey {
     const publicKeyEc = publicKey.toElliptic()
     const publicKeyHex = publicKeyEc.getPublic('hex')
 
-    const derHex = `${DER_HEX_PREFIX_PRIVATE}${privateKeyHex}${DER_HEX_SEPERATOR_PRIVATE}${publicKeyHex}`
+    const derHex = `${DER_HEX_PREFIX}${privateKeyHex}${DER_HEX_SEPERATOR}${publicKeyHex}`
     const derBinary = Buffer.from(derHex, 'hex').toString('binary')
     const pkcs8ArrayBuffer = stringToArray(derBinary)
     return await crypto.subtle.importKey(

@@ -1,3 +1,6 @@
+import { PrivateKey } from './PrivateKey'
+import { PublicKey } from './PublicKey'
+
 import { KeyType } from '../config'
 import {
   ALGORITHM_CURVE,
@@ -7,8 +10,7 @@ import {
   ERRORS,
   KEY_USAGE,
 } from '../constant'
-import { crypto, EC } from '../external'
-import { PrivateKey, PublicKey } from '../keys'
+import { crypto, EC, GenKeyPairOptions } from '../external'
 
 const DEFAULT_ALGORITHM: EcKeyGenParams = {
   name: ALGORITHM_NAME,
@@ -17,9 +19,15 @@ const DEFAULT_ALGORITHM: EcKeyGenParams = {
 
 const DEFAULT_KEY_USAGE: ReadonlyArray<KeyUsage> = [KEY_USAGE.SIGN, KEY_USAGE.VERIFY]
 
+/**
+ * @description generate private & public key pair
+ * @param type r1 (default) or k1
+ * @param options
+ * @returns private & public keys
+ */
 export const generateKeyPair = (
-  type: KeyType,
-  options: { secureEnv?: boolean; ecOptions?: EC.GenKeyPairOptions } = {}
+  type: KeyType = KeyType.r1,
+  options: { secureEnv?: boolean; ecOptions?: GenKeyPairOptions } = {}
 ): { publicKey: PublicKey; privateKey: PrivateKey } => {
   if (!options.secureEnv) {
     throw ERRORS.INSECURE_ENV
@@ -45,3 +53,21 @@ export const generateWebCryptoKeyPair = async (
   keyUsage = DEFAULT_KEY_USAGE,
   algorithm = DEFAULT_ALGORITHM
 ): Promise<CryptoKeyPair> => await crypto.subtle.generateKey(algorithm, extractable, keyUsage)
+
+/**
+ * @description generate api keys
+ * - api keys once generated should be added to your account
+ * - once the api keys are added, it can be used to sign request
+ * - backend will be able to verify request using the signature added to header
+ * @returns
+ */
+export const generateWebCryptoStringKeyPair = async (extractable = true) => {
+  const { privateKey, publicKey } = await generateWebCryptoKeyPair(extractable)
+  const publicKeyString = (await PublicKey.fromWebCrypto(publicKey)).toString()
+  const privateKeyString = (await PrivateKey.fromWebCrypto(privateKey)).toString()
+
+  return {
+    publicKey: publicKeyString,
+    privateKey: privateKeyString,
+  }
+}

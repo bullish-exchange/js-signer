@@ -1,6 +1,6 @@
 {
   "name": "js-signer",
-  "version": "1.0.3",
+  "version": "1.0.5",
   "description": "This repository provides library to sign any arbitrary message with an EOSIO R1 key and produce an EOSIO signature",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
@@ -64,6 +64,7 @@
     "fix:lint": "eslint --fix 'src/**/*.ts'",
     "fix:prettier": "prettier --write 'src/**/*.ts'",
     "fix": "npm-run-all fix:*",
+    "jest": "jest",
     "test:lint": "eslint 'src/**/*.ts'",
     "test:prettier": "prettier --check 'src/**/*.ts'",
     "test:coverage": "jest --coverage",

@@ -1,4 +1,4 @@
-import { generateKeyPair, generateWebCryptoKeyPair } from './keyUtils'
+import { generateKeyPair, generateWebCryptoKeyPair, generateWebCryptoStringKeyPair } from './keyUtils'
 
 import { KeyType } from '../config'
 import { ALGORITHM_CURVE, ALGORITHM_NAME, ERROR_TEXT, KEY_TYPE, KEY_USAGE } from '../constant'
@@ -104,5 +104,12 @@ describe('generateKeyPair', () => {
     expect(publicKey.extractable).toBeFalsy()
     const convertPublicKey = async (pubKey: CryptoKey) => PublicKey.fromWebCrypto(pubKey)
     await expect(async () => convertPublicKey(publicKey)).rejects.toThrow(Error(ERROR_TEXT.KEY_UNEXTRACTABLE))
+  })
+
+  it('generate public & private key', async () => {
+    const result = await generateWebCryptoStringKeyPair()
+
+    expect(typeof result.privateKey).toBe('string')
+    expect(typeof result.publicKey).toBe('string')
   })
 })

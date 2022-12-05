@@ -41,8 +41,8 @@
     ".editorconfig": ".cspell.json, .nvmrc",
     "commitlint.config.js": ".commitlintrc.json",
     ".gitignore": ".gitattributes",
-    // "rollup.config.js": "tsconfig.json, jest.config.json",
     "README.md": "LICENSE"
   },
-  "todohighlight.keywords": ["eslint-disable-next-line"]
+  "todohighlight.keywords": ["eslint-disable-next-line"],
+  "jest.jestCommandLine": "yarn jest"
 }

@@ -6,7 +6,6 @@ import { Key, KeyType } from '../config'
 import {
   ALGORITHM_CURVE,
   ALGORITHM_NAME,
-  DER_HEX_PREFIX_PUBLIC,
   ELLIPTIC_CURVE,
   ELLIPTIC_CURVE_K1,
   ERRORS,
@@ -21,6 +20,8 @@ import {
   stringToArray,
   stringToPublicKey,
 } from '../numeric'
+
+export const DER_HEX_PREFIX = '3059301306072a8648ce3d020106082a8648ce3d030107034200'
 
 /** Represents/stores a public key and provides easy conversion for use with `elliptic` lib */
 export class PublicKey implements AbstractPublicKey {
@@ -69,7 +70,7 @@ export class PublicKey implements AbstractPublicKey {
     const extractedArrayBuffer = await crypto.subtle.exportKey(KEY_FORMAT.SPKI, publicKey)
     const extractedDecoded = arrayToString(extractedArrayBuffer)
     const derHex = Buffer.from(extractedDecoded, 'binary').toString('hex')
-    const publicKeyHex = derHex.replace(DER_HEX_PREFIX_PUBLIC, '')
+    const publicKeyHex = derHex.replace(DER_HEX_PREFIX, '')
     const publicKeyEc = ec.keyFromPublic(publicKeyHex, 'hex')
     return PublicKey.fromElliptic(publicKeyEc, KeyType.r1, ec)
   }
@@ -96,7 +97,7 @@ export class PublicKey implements AbstractPublicKey {
     const publicKeyEc = this.toElliptic()
     const publicKeyHex = publicKeyEc.getPublic('hex')
 
-    const derHex = `${DER_HEX_PREFIX_PUBLIC}${publicKeyHex}`
+    const derHex = `${DER_HEX_PREFIX}${publicKeyHex}`
     const derBase64 = Buffer.from(derHex, 'hex').toString('binary')
     const spkiArrayBuffer = stringToArray(derBase64)
     return await crypto.subtle.importKey(
