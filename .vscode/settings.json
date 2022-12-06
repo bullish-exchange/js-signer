@@ -39,6 +39,10 @@
     ".eslintrc.json": ".eslintignore",
     ".prettierrc.json": ".prettierignore",
     ".editorconfig": ".cspell.json, .nvmrc",
-    "commitlint.config.js": ".commitlintrc.json"
-  }
+    "commitlint.config.js": ".commitlintrc.json",
+    ".gitignore": ".gitattributes",
+    "README.md": "LICENSE"
+  },
+  "todohighlight.keywords": ["eslint-disable-next-line"],
+  "jest.jestCommandLine": "yarn jest"
 }
