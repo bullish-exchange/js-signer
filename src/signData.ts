@@ -1,4 +1,5 @@
-import { sha256 } from './external'
+import { sha256 } from 'hash.js'
+
 import { PrivateKey } from './keys'
 
 export const signData = (data: string, privateKey: string) => {

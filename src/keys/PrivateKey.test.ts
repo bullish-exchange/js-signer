@@ -1,9 +1,11 @@
+import { ec as EC } from 'elliptic'
+
 import { generateKeyPair } from './keyUtils'
 
 import { KeyType } from '../config'
 import { ALGORITHM_CURVE, ALGORITHM_NAME, KEY_USAGE } from '../constant'
-import { crypto, EC } from '../external'
 import { PrivateKey, Signature } from '../keys'
+import { subtle } from '../subtle'
 
 describe('PrivateKey', () => {
   describe('secp256k1', () => {
@@ -20,8 +22,8 @@ describe('PrivateKey', () => {
     it('ensures private key elliptic conversion functions are consistent', () => {
       const { privateKey } = generateKeyPair(KeyType.k1, { secureEnv: true })
       const ellipticPrivKey = privateKey.toElliptic()
-      const eosPrivKey = PrivateKey.fromElliptic(ellipticPrivKey, KeyType.k1)
-      expect(eosPrivKey.toString()).toEqual(privateKey.toString())
+      const bullishPrivKey = PrivateKey.fromElliptic(ellipticPrivKey, KeyType.k1)
+      expect(bullishPrivKey.toString()).toEqual(privateKey.toString())
     })
 
     it('ensures signature elliptic conversion functions are consistent', () => {
@@ -32,14 +34,14 @@ describe('PrivateKey', () => {
       const signature = privateKey.sign(digest)
 
       const ellipticSig = signature.toElliptic() as EC.Signature
-      const eosSig = Signature.fromElliptic(ellipticSig, KeyType.k1)
-      expect(eosSig.toString()).toEqual(signature.toString())
+      const bullishSig = Signature.fromElliptic(ellipticSig, KeyType.k1)
+      expect(bullishSig.toString()).toEqual(signature.toString())
     })
 
     it('ensures private key string conversion functions are consistent', () => {
       const privateKeyStr = privateKey.toString()
-      const eosPrivKey = PrivateKey.fromString(privateKeyStr)
-      expect(eosPrivKey.toString()).toEqual(privateKey.toString())
+      const bullishPrivKey = PrivateKey.fromString(privateKeyStr)
+      expect(bullishPrivKey.toString()).toEqual(privateKey.toString())
     })
 
     it('ensures signature string conversion functions are consistent', () => {
@@ -49,14 +51,14 @@ describe('PrivateKey', () => {
       const signature = privateKey.sign(digest)
 
       const sigStr = signature.toString()
-      const eosSig = Signature.fromString(sigStr)
-      expect(eosSig.toString()).toEqual(signature.toString())
+      const bullishSig = Signature.fromString(sigStr)
+      expect(bullishSig.toString()).toEqual(signature.toString())
     })
 
     it('ensures private key string and legacy string conversion functions are consistent', () => {
       const privateKeyStr = privateKey.toString()
-      const eosPrivKey = PrivateKey.fromString(privateKeyStr)
-      expect(eosPrivKey.toString()).toEqual(privateKey.toString())
+      const bullishPrivKey = PrivateKey.fromString(privateKeyStr)
+      expect(bullishPrivKey.toString()).toEqual(privateKey.toString())
     })
 
     it('ensures elliptic sign, recover, verify flow works', () => {
@@ -105,8 +107,8 @@ describe('PrivateKey', () => {
 
     it('ensures private key elliptic conversion functions are consistent', () => {
       const ellipticPrivKey = privateKey.toElliptic()
-      const eosPrivKey = PrivateKey.fromElliptic(ellipticPrivKey, KeyType.r1)
-      expect(eosPrivKey.toString()).toEqual(privateKey.toString())
+      const bullishPrivKey = PrivateKey.fromElliptic(ellipticPrivKey, KeyType.r1)
+      expect(bullishPrivKey.toString()).toEqual(privateKey.toString())
     })
 
     it('ensures signature elliptic conversion functions are consistent', () => {
@@ -116,14 +118,14 @@ describe('PrivateKey', () => {
       const signature = privateKey.sign(digest)
 
       const ellipticSig = signature.toElliptic() as EC.Signature
-      const eosSig = Signature.fromElliptic(ellipticSig, KeyType.r1)
-      expect(eosSig.toString()).toEqual(signature.toString())
+      const bullishSig = Signature.fromElliptic(ellipticSig, KeyType.r1)
+      expect(bullishSig.toString()).toEqual(signature.toString())
     })
 
     it('ensures private key string conversion functions are consistent', () => {
       const privateKeyStr = privateKey.toString()
-      const eosPrivKey = PrivateKey.fromString(privateKeyStr)
-      expect(eosPrivKey.toString()).toEqual(privateKey.toString())
+      const bullishPrivKey = PrivateKey.fromString(privateKeyStr)
+      expect(bullishPrivKey.toString()).toEqual(privateKey.toString())
     })
 
     it('ensures signature string conversion functions are consistent', () => {
@@ -133,14 +135,14 @@ describe('PrivateKey', () => {
       const signature = privateKey.sign(digest)
 
       const sigStr = signature.toString()
-      const eosSig = Signature.fromString(sigStr)
-      expect(eosSig.toString()).toEqual(signature.toString())
+      const bullishSig = Signature.fromString(sigStr)
+      expect(bullishSig.toString()).toEqual(signature.toString())
     })
 
     it('ensures private key string and legacy string conversion functions are consistent', () => {
       const privateKeyStr = privateKey.toString()
-      const eosPrivKey = PrivateKey.fromString(privateKeyStr)
-      expect(eosPrivKey.toString()).toEqual(privateKey.toString())
+      const bullishPrivKey = PrivateKey.fromString(privateKeyStr)
+      expect(bullishPrivKey.toString()).toEqual(privateKey.toString())
     })
     it('ensures elliptic sign, recover, verify flow works', () => {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
@@ -177,7 +179,7 @@ describe('PrivateKey', () => {
 
   describe('p256 WebCrypto', () => {
     it('converts private extractable CryptoKey to PrivateKey', async () => {
-      const { privateKey } = await crypto.subtle.generateKey(
+      const { privateKey } = await subtle.generateKey(
         {
           name: ALGORITHM_NAME,
           namedCurve: ALGORITHM_CURVE,
@@ -203,7 +205,7 @@ describe('PrivateKey', () => {
   })
   it('confirm a keyPair constructed from Web Crypto can be converted reciprocally', async () => {
     const ec = new EC('p256')
-    const { privateKey } = await crypto.subtle.generateKey(
+    const { privateKey } = await subtle.generateKey(
       {
         name: ALGORITHM_NAME,
         namedCurve: ALGORITHM_CURVE,
@@ -222,7 +224,7 @@ describe('PrivateKey', () => {
   })
 
   it('Ensure Web Crypt sign, recover, verify flow works', async () => {
-    const { privateKey } = await crypto.subtle.generateKey(
+    const { privateKey } = await subtle.generateKey(
       {
         name: ALGORITHM_NAME,
         namedCurve: ALGORITHM_CURVE,

@@ -17,7 +17,7 @@ const name = main.replace(/\.js$/, '')
 const config = {
   esbuild: {
     minify: isProd,
-    target: 'esnext',
+    target: 'es6',
     define: {
       __VERSION__: '"x.y.z"',
     },

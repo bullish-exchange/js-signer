@@ -1,3 +1,5 @@
+import { sha256 } from 'hash.js'
+
 import { privateKeyDataSize, publicKeyDataSize, signatureDataSize } from './numeric.config'
 import { base58Map, base64Map, binaryToBase58, ripemd160FromBuffer } from './numeric.util'
 
@@ -10,7 +12,6 @@ import {
   SignatureStringPrefix,
 } from '../config'
 import { ERRORS } from '../constant'
-import { sha256 } from '../external'
 
 /** Is `bignum` a negative number? */
 export const isNegative = (bignum: Uint8Array): boolean => (bignum[bignum.length - 1] & 0x80) !== 0
@@ -254,11 +255,24 @@ const keyToString = (key: Key, suffix: string, prefix: string): string => {
   return prefix + binaryToBase58(whole)
 }
 
-/** Convert key in `s` to binary form */
-export const stringToPublicKey = (s: string): Key => {
-  if (typeof s !== 'string') {
-    throw ERRORS.EXPECTED_STRING_CONTAINING_PUBLIC_KEY
+/** Convert `key` to string (base-58) form */
+export const publicKeyToString = (key: Key): string => {
+  if (key.type === KeyType.k1 && key.data.length === publicKeyDataSize) {
+    return keyToString(key, 'K1', 'PUB_K1_')
+  } else if (key.type === KeyType.r1 && key.data.length === publicKeyDataSize) {
+    return keyToString(key, 'R1', 'PUB_R1_')
+  } else if (key.type === KeyType.wa) {
+    return keyToString(key, KeyStringSuffix.WA, PubKeyStringPrefix.WA)
+  } else {
+    throw ERRORS.UNRECOGNIZED_PUBLIC_KEY_FORMAT
   }
+}
+
+/**
+ * @deprecated
+ * Convert legacy key in `s` to binary form
+ */
+const legacyStringToPublicKey = (s: string): Key => {
   if (s.substring(0, 3) === 'EOS') {
     const whole = base58ToBinary(publicKeyDataSize + 4, s.substring(3))
     const key = { type: KeyType.k1, data: new Uint8Array(publicKeyDataSize) }
@@ -275,18 +289,30 @@ export const stringToPublicKey = (s: string): Key => {
       throw ERRORS.CHECKSUM_MISMATCH
     }
     return key
-  } else if (s.substring(0, 7) === PubKeyStringPrefix.K1) {
+  }
+  throw ERRORS.UNRECOGNIZED_PUBLIC_KEY_FORMAT
+}
+
+/** Convert key in `s` to binary form */
+export const stringToPublicKey = (s: string): Key => {
+  if (typeof s !== 'string') {
+    throw ERRORS.EXPECTED_STRING_CONTAINING_PUBLIC_KEY
+  }
+  if (s.substring(0, 7) === PubKeyStringPrefix.K1) {
     return stringToKey(s.substring(7), KeyType.k1, publicKeyDataSize, KeyStringSuffix.K1)
   } else if (s.substring(0, 7) === PubKeyStringPrefix.R1) {
     return stringToKey(s.substring(7), KeyType.r1, publicKeyDataSize, KeyStringSuffix.R1)
   } else if (s.substring(0, 7) === PubKeyStringPrefix.WA) {
     return stringToKey(s.substring(7), KeyType.wa, 0, KeyStringSuffix.WA)
-  } else {
-    throw ERRORS.UNRECOGNIZED_PUBLIC_KEY_FORMAT
   }
+  // this can be replaced by throw ERRORS.UNRECOGNIZED_PUBLIC_KEY_FORMAT
+  return legacyStringToPublicKey(s)
 }
 
-/** Convert public `key` to legacy string (base-58) form */
+/**
+ * @deprecated
+ * Convert public `key` to legacy string (base-58) form
+ */
 export const publicKeyToLegacyString = (key: Key): string => {
   if (key.type === KeyType.k1 && key.data.length === publicKeyDataSize) {
     return keyToString(key, '', 'EOS')
@@ -297,20 +323,9 @@ export const publicKeyToLegacyString = (key: Key): string => {
   }
 }
 
-/** Convert `key` to string (base-58) form */
-export const publicKeyToString = (key: Key): string => {
-  if (key.type === KeyType.k1 && key.data.length === publicKeyDataSize) {
-    return keyToString(key, 'K1', 'PUB_K1_')
-  } else if (key.type === KeyType.r1 && key.data.length === publicKeyDataSize) {
-    return keyToString(key, 'R1', 'PUB_R1_')
-  } else if (key.type === KeyType.wa) {
-    return keyToString(key, KeyStringSuffix.WA, PubKeyStringPrefix.WA)
-  } else {
-    throw ERRORS.UNRECOGNIZED_PUBLIC_KEY_FORMAT
-  }
-}
-
-/** If a key is in the legacy format (`EOS` prefix), then convert it to the new format (`PUB_K1_`).
+/**
+ * @deprecated
+ * If a key is in the legacy format (`EOS` prefix), then convert it to the new format (`PUB_K1_`).
  * Leaves other formats untouched
  */
 export const convertLegacyPublicKey = (s: string): string => {
@@ -320,7 +335,9 @@ export const convertLegacyPublicKey = (s: string): string => {
   return s
 }
 
-/** If a key is in the legacy format (`EOS` prefix), then convert it to the new format (`PUB_K1_`).
+/**
+ * @deprecated
+ * If a key is in the legacy format (`EOS` prefix), then convert it to the new format (`PUB_K1_`).
  * Leaves other formats untouched
  */
 export const convertLegacyPublicKeys = (keys: string[]): string[] => {

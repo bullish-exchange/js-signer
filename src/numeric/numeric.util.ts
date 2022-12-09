@@ -1,5 +1,7 @@
+import { Buffer } from 'buffer'
+import RIPEMD160 from 'ripemd160'
+
 import { base58Chars, base64Chars } from '../constant'
-import { Buffer, RIPEMD160 } from '../external'
 
 const create_base58_map = (): number[] => {
   const base58M = Array(256).fill(-1) as number[]
