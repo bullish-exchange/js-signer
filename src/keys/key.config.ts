@@ -1,7 +1,7 @@
+import BN from 'bn.js'
 import { BNInput, ec as EC } from 'elliptic'
 
 import { BufferEncoding, KeyType } from '../config'
-import { BN } from '../external'
 
 export type WebCryptoSignatureData =
   | Int8Array

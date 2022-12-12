@@ -4,8 +4,8 @@
  */
 
 import { ALGORITHM_HASH, ALGORITHM_NAME } from './constant'
-import { crypto } from './external'
 import { PrivateKey, PublicKey, Signature } from './keys'
+import { subtle } from './subtle'
 
 /**
  * @description generates signature for a given payload using the keys provided
@@ -23,23 +23,19 @@ export const getSignature = async <T = unknown>(
   const enc = new TextEncoder()
   const message = JSON.stringify(payload)
 
-  let signature = ''
-
   if (typeof privateKey !== 'string') {
     const messageBuffer = enc.encode(message)
-    const webCryptoSig = await crypto.subtle.sign(
+    const webCryptoSig = await subtle.sign(
       { name: ALGORITHM_NAME, hash: ALGORITHM_HASH },
       privateKey,
       messageBuffer
     )
-    signature = await Signature.fromWebCrypto(
+    const signature = await Signature.fromWebCrypto(
       messageBuffer,
       webCryptoSig,
       PublicKey.fromString(publicKey)
-    ).then(sig => sig.toString())
-  } else {
-    signature = PrivateKey.fromString(privateKey).sign(message, true).toString()
+    )
+    return signature.toString()
   }
-
-  return signature
+  return PrivateKey.fromString(privateKey).sign(message, true).toString()
 }

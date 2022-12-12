@@ -1,3 +1,5 @@
+import { ec as EC } from 'elliptic'
+
 import { PrivateKey } from './PrivateKey'
 import { PublicKey } from './PublicKey'
 
@@ -10,7 +12,7 @@ import {
   ERRORS,
   KEY_USAGE,
 } from '../constant'
-import { crypto, EC, GenKeyPairOptions } from '../external'
+import { subtle } from '../subtle'
 
 const DEFAULT_ALGORITHM: EcKeyGenParams = {
   name: ALGORITHM_NAME,
@@ -27,7 +29,7 @@ const DEFAULT_KEY_USAGE: ReadonlyArray<KeyUsage> = [KEY_USAGE.SIGN, KEY_USAGE.VE
  */
 export const generateKeyPair = (
   type: KeyType = KeyType.r1,
-  options: { secureEnv?: boolean; ecOptions?: GenKeyPairOptions } = {}
+  options: { secureEnv?: boolean; ecOptions?: EC.GenKeyPairOptions } = {}
 ): { publicKey: PublicKey; privateKey: PrivateKey } => {
   if (!options.secureEnv) {
     throw ERRORS.INSECURE_ENV
@@ -52,7 +54,7 @@ export const generateWebCryptoKeyPair = async (
   extractable = false,
   keyUsage = DEFAULT_KEY_USAGE,
   algorithm = DEFAULT_ALGORITHM
-): Promise<CryptoKeyPair> => await crypto.subtle.generateKey(algorithm, extractable, keyUsage)
+): Promise<CryptoKeyPair> => await subtle.generateKey(algorithm, extractable, keyUsage)
 
 /**
  * @description generate api keys

@@ -1,4 +1,5 @@
 import { Buffer } from 'buffer'
+import { ec as EC } from 'elliptic'
 
 import { AbstractPublicKey } from './key.config'
 
@@ -12,7 +13,6 @@ import {
   KEY_FORMAT,
   KEY_USAGE,
 } from '../constant'
-import { crypto, EC } from '../external'
 import {
   arrayToString,
   publicKeyToLegacyString,
@@ -20,6 +20,7 @@ import {
   stringToArray,
   stringToPublicKey,
 } from '../numeric'
+import { subtle } from '../subtle'
 
 export const DER_HEX_PREFIX = '3059301306072a8648ce3d020106082a8648ce3d030107034200'
 
@@ -27,7 +28,7 @@ export const DER_HEX_PREFIX = '3059301306072a8648ce3d020106082a8648ce3d030107034
 export class PublicKey implements AbstractPublicKey {
   constructor(private key: Key, private ec: EC) {}
 
-  /** Instantiate public key from an EOSIO-format public key */
+  /** Instantiate public key from an Bullish-format public key */
   public static fromString(publicKeyStr: string, ec?: EC): PublicKey {
     const key = stringToPublicKey(publicKeyStr)
     if (!ec) {
@@ -67,7 +68,7 @@ export class PublicKey implements AbstractPublicKey {
     }
     const ec = new EC(ELLIPTIC_CURVE)
 
-    const extractedArrayBuffer = await crypto.subtle.exportKey(KEY_FORMAT.SPKI, publicKey)
+    const extractedArrayBuffer = await subtle.exportKey(KEY_FORMAT.SPKI, publicKey)
     const extractedDecoded = arrayToString(extractedArrayBuffer)
     const derHex = Buffer.from(extractedDecoded, 'binary').toString('hex')
     const publicKeyHex = derHex.replace(DER_HEX_PREFIX, '')
@@ -75,12 +76,15 @@ export class PublicKey implements AbstractPublicKey {
     return PublicKey.fromElliptic(publicKeyEc, KeyType.r1, ec)
   }
 
-  /** Export public key as EOSIO-format public key */
+  /** Export public key as Bullish-format public key */
   public toString(): string {
     return publicKeyToString(this.key)
   }
 
-  /** Export public key as Legacy EOSIO-format public key */
+  /**
+   * @deprecated
+   * Export public key as Legacy Bullish-format public key
+   */
   public toLegacyString(): string {
     return publicKeyToLegacyString(this.key)
   }
@@ -100,7 +104,7 @@ export class PublicKey implements AbstractPublicKey {
     const derHex = `${DER_HEX_PREFIX}${publicKeyHex}`
     const derBase64 = Buffer.from(derHex, 'hex').toString('binary')
     const spkiArrayBuffer = stringToArray(derBase64)
-    return await crypto.subtle.importKey(
+    return await subtle.importKey(
       KEY_FORMAT.SPKI,
       spkiArrayBuffer,
       {

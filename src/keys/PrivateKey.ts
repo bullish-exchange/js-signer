@@ -1,4 +1,5 @@
 import { Buffer } from 'buffer'
+import { BNInput, ec as EC } from 'elliptic'
 
 import { AbstractPrivateKey, WebCryptoSignatureData } from './key.config'
 import { PublicKey } from './PublicKey'
@@ -15,7 +16,6 @@ import {
   KEY_FORMAT,
   KEY_USAGE,
 } from '../constant'
-import { BNInput, crypto, EC } from '../external'
 import {
   arrayToString,
   privateKeyToLegacyString,
@@ -23,6 +23,7 @@ import {
   stringToArray,
   stringToPrivateKey,
 } from '../numeric'
+import { subtle } from '../subtle'
 
 const DER_HEX_PREFIX = '308187020100301306072a8648ce3d020106082a8648ce3d030107046d306b0201010420'
 const DER_HEX_SEPERATOR = 'a144034200'
@@ -56,7 +57,7 @@ export class PrivateKey implements AbstractPrivateKey {
     }
     const ec = new EC(ELLIPTIC_CURVE)
 
-    const extractedArrayBuffer = await crypto.subtle.exportKey(KEY_FORMAT.PKCS8, privKey)
+    const extractedArrayBuffer = await subtle.exportKey(KEY_FORMAT.PKCS8, privKey)
     const extractedDecoded = arrayToString(extractedArrayBuffer)
     const derHex = Buffer.from(extractedDecoded, 'binary').toString('hex')
     let privateKeyHex = derHex.replace(DER_HEX_PREFIX, '')
@@ -65,7 +66,7 @@ export class PrivateKey implements AbstractPrivateKey {
     return PrivateKey.fromElliptic(privateKeyEc, KeyType.r1, ec)
   }
 
-  /** Instantiate private key from an EOSIO-format private key */
+  /** Instantiate private key from an Bullish-format private key */
   public static fromString(keyString: string, ec?: EC): PrivateKey {
     const privateKey = stringToPrivateKey(keyString)
     if (!ec) {
@@ -94,7 +95,7 @@ export class PrivateKey implements AbstractPrivateKey {
     const derHex = `${DER_HEX_PREFIX}${privateKeyHex}${DER_HEX_SEPERATOR}${publicKeyHex}`
     const derBinary = Buffer.from(derHex, 'hex').toString('binary')
     const pkcs8ArrayBuffer = stringToArray(derBinary)
-    return await crypto.subtle.importKey(
+    return await subtle.importKey(
       KEY_FORMAT.PKCS8,
       pkcs8ArrayBuffer,
       {
@@ -110,7 +111,7 @@ export class PrivateKey implements AbstractPrivateKey {
     return privateKeyToLegacyString(this.key)
   }
 
-  /** Export private key as EOSIO-format private key */
+  /** Export private key as Bullish-format private key */
   public toString(): string {
     return privateKeyToString(this.key)
   }
@@ -170,7 +171,7 @@ export class PrivateKey implements AbstractPrivateKey {
       },
     }
 
-    const webCryptoSig = await crypto.subtle.sign(algorithm, privWebCrypto, data)
+    const webCryptoSig = await subtle.sign(algorithm, privWebCrypto, data)
 
     return Signature.fromWebCrypto(data, webCryptoSig, publicKey)
   }

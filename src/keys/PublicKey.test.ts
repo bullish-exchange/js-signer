@@ -1,10 +1,12 @@
+import { ec as EC } from 'elliptic'
+
 import { generateKeyPair } from './keyUtils'
 import { PrivateKey } from './PrivateKey'
 import { PublicKey } from './PublicKey'
 
 import { KeyType } from '../config'
 import { ALGORITHM_CURVE, ALGORITHM_NAME, ELLIPTIC_CURVE, KEY_USAGE } from '../constant'
-import { crypto, EC } from '../external'
+import { subtle } from '../subtle'
 
 describe('Elliptic Curve Cryptography', () => {
   describe('secp256k1', () => {
@@ -13,20 +15,20 @@ describe('Elliptic Curve Cryptography', () => {
     it('ensures public key elliptic conversion functions are consistent', () => {
       const { publicKey } = generateKeyPair(KeyType.k1, { secureEnv: true })
       const ellipticPubKey = publicKey.toElliptic()
-      const eosPubKey = PublicKey.fromElliptic(ellipticPubKey, KeyType.k1)
-      expect(eosPubKey.toString()).toEqual(publicKey.toString())
+      const bullishPubKey = PublicKey.fromElliptic(ellipticPubKey, KeyType.k1)
+      expect(bullishPubKey.toString()).toEqual(publicKey.toString())
     })
 
     it('ensures public key string conversion functions are consistent', () => {
       const publicKeyStr = publicKey.toString()
-      const eosPubKey = PublicKey.fromString(publicKeyStr)
-      expect(eosPubKey.toString()).toEqual(publicKey.toString())
+      const bullishPubKey = PublicKey.fromString(publicKeyStr)
+      expect(bullishPubKey.toString()).toEqual(publicKey.toString())
     })
 
     it('ensures public key string and legacy string conversion functions are consistent', () => {
       const publicKeyStr = publicKey.toString()
-      const eosPubKey = PublicKey.fromString(publicKeyStr)
-      expect(eosPubKey.toString()).toEqual(publicKey.toString())
+      const bullishPubKey = PublicKey.fromString(publicKeyStr)
+      expect(bullishPubKey.toString()).toEqual(publicKey.toString())
     })
   })
 
@@ -35,20 +37,20 @@ describe('Elliptic Curve Cryptography', () => {
 
     it('ensures public key elliptic conversion functions are consistent', () => {
       const ellipticPubKey = publicKey.toElliptic()
-      const eosPubKey = PublicKey.fromElliptic(ellipticPubKey, KeyType.r1)
-      expect(eosPubKey.toString()).toEqual(publicKey.toString())
+      const bullishPubKey = PublicKey.fromElliptic(ellipticPubKey, KeyType.r1)
+      expect(bullishPubKey.toString()).toEqual(publicKey.toString())
     })
 
     it('ensures public key string conversion functions are consistent', () => {
       const publicKeyStr = publicKey.toString()
-      const eosPubKey = PublicKey.fromString(publicKeyStr)
-      expect(eosPubKey.toString()).toEqual(publicKey.toString())
+      const bullishPubKey = PublicKey.fromString(publicKeyStr)
+      expect(bullishPubKey.toString()).toEqual(publicKey.toString())
     })
 
     it('ensures public key string and legacy string conversion functions are consistent', () => {
       const publicKeyStr = publicKey.toString()
-      const eosPubKey = PublicKey.fromString(publicKeyStr)
-      expect(eosPubKey.toString()).toEqual(publicKey.toString())
+      const bullishPubKey = PublicKey.fromString(publicKeyStr)
+      expect(bullishPubKey.toString()).toEqual(publicKey.toString())
     })
   })
 
@@ -69,7 +71,7 @@ describe('Elliptic Curve Cryptography', () => {
 
     it('confirm a keyPair constructed from Web Crypto can be converted reciprocally', async () => {
       const ec = new EC(ELLIPTIC_CURVE)
-      const { publicKey } = await crypto.subtle.generateKey(
+      const { publicKey } = await subtle.generateKey(
         {
           name: ALGORITHM_NAME,
           namedCurve: ALGORITHM_CURVE,
@@ -90,7 +92,7 @@ describe('Elliptic Curve Cryptography', () => {
     })
 
     it('Ensure Web Crypt sign, recover, verify flow works', async () => {
-      const { privateKey, publicKey } = await crypto.subtle.generateKey(
+      const { privateKey, publicKey } = await subtle.generateKey(
         {
           name: ALGORITHM_NAME,
           namedCurve: ALGORITHM_CURVE,

@@ -1,18 +1,20 @@
-import { BNInput } from 'elliptic'
+import BN from 'bn.js'
+import { Buffer } from 'buffer'
+import { BNInput, ec as EC } from 'elliptic'
 
 import { AbstractPublicKey, AbstractSignature, WebCryptoSignatureData } from './key.config'
 import { PublicKey } from './PublicKey'
 
 import { BufferEncoding, Key, KeyType } from '../config'
 import { ALGORITHM_HASH, ALGORITHM_NAME, ELLIPTIC_CURVE, ELLIPTIC_CURVE_K1, ERRORS } from '../constant'
-import { BN, Buffer, crypto, EC } from '../external'
 import { signatureToString, stringToSignature } from '../numeric'
+import { subtle } from '../subtle'
 
 /** Represents/stores a Signature and provides easy conversion for use with `elliptic` lib */
 export class Signature implements AbstractSignature {
   constructor(private signature: Key, private ec: EC) {}
 
-  /** Instantiate Signature from an EOSIO-format Signature */
+  /** Instantiate Signature from an Bullish-format Signature */
   public static fromString(sig: string, ec?: EC): Signature {
     const signature = stringToSignature(sig)
     if (!ec) {
@@ -34,16 +36,16 @@ export class Signature implements AbstractSignature {
     const r = ellipticSig.r.toArray('be', 32)
     const s = ellipticSig.s.toArray('be', 32)
     const recoveryParam = ellipticSig.recoveryParam ?? 0
-    let eosioRecoveryParam = 0
+    let bullishRecoveryParam = 0
     if (keyType === KeyType.k1 || keyType === KeyType.r1) {
-      eosioRecoveryParam = recoveryParam + 27
+      bullishRecoveryParam = recoveryParam + 27
       if (recoveryParam <= 3) {
-        eosioRecoveryParam += 4
+        bullishRecoveryParam += 4
       }
     } else if (keyType === KeyType.wa) {
-      eosioRecoveryParam = recoveryParam
+      bullishRecoveryParam = recoveryParam
     }
-    const sigData = new Uint8Array([eosioRecoveryParam].concat(r, s))
+    const sigData = new Uint8Array([bullishRecoveryParam].concat(r, s))
     if (!ec) {
       if (keyType === KeyType.k1) {
         ec = new EC(ELLIPTIC_CURVE_K1)
@@ -68,7 +70,7 @@ export class Signature implements AbstractSignature {
   ) {
     const ec = new EC(ELLIPTIC_CURVE)
 
-    const hash = await crypto.subtle.digest(ALGORITHM_HASH, data)
+    const hash = await subtle.digest(ALGORITHM_HASH, data)
     const r = new BN(new Uint8Array(webCryptoSig.slice(0, 32)), 32)
     let s = new BN(new Uint8Array(webCryptoSig.slice(32)), 32)
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
@@ -128,7 +130,7 @@ export class Signature implements AbstractSignature {
     return { r, s, recoveryParam }
   }
 
-  /** Export Signature as EOSIO-format Signature */
+  /** Export Signature as Bullish-format Signature */
   public toString(): string {
     return signatureToString(this.signature)
   }
@@ -169,7 +171,7 @@ export class Signature implements AbstractSignature {
     publicKey: AbstractPublicKey
   ): Promise<boolean> {
     const webCryptoPub = await publicKey.toWebCrypto()
-    return await crypto.subtle.verify(
+    return await subtle.verify(
       {
         name: ALGORITHM_NAME,
         hash: {
