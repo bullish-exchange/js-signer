@@ -1,6 +1,6 @@
-# NodeJS/Javascript library for Signing Messages
+# NodeJS/Javascript message signing example
 
-This repository provides library to sign any arbitrary message with an R1 key and produce an Bullish compatible signature
+This repository provides an example of signing any arbitrary message with an R1 key and produce an Bullish compatible signature
 
 ## How to use
 
