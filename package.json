@@ -1,6 +1,6 @@
 {
   "name": "js-signer",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "This repository provides library to sign any arbitrary message with an Bullish R1 key and produce an Bullish signature",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
