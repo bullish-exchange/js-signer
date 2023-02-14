@@ -1,6 +1,6 @@
 {
   "name": "js-signer",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "This repository provides library to sign any arbitrary message with an Bullish R1 key and produce an Bullish signature",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
@@ -69,6 +69,9 @@
     "test:prettier": "prettier --check 'src/**/*.ts'",
     "test:coverage": "jest --coverage",
     "test": "npm-run-all test:*",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "publish:local": "",
+    "publish:npmjs": "yarn publish --registry=https://registry.npmjs.org/",
+    "publish-all": "npm-run-all publish:*"
   }
 }
