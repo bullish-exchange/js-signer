@@ -46,10 +46,6 @@ async function useSignature() {
 useSignature()
 ```
 
-## Package Management
-
-Please remember to publish to npmjs as well as our own internal artifactory repository
-
 ## Example for different frameworks
 
 ### NodeJs
