@@ -70,7 +70,7 @@
     "test:coverage": "jest --coverage",
     "test": "npm-run-all test:*",
     "prepare": "husky install",
-    "publish:local": "",
+    "publish:local": "yarn publish",
     "publish:npmjs": "yarn publish --registry=https://registry.npmjs.org/",
     "publish-all": "npm-run-all publish:*"
   }
