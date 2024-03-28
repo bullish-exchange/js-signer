@@ -1,6 +1,6 @@
 {
   "name": "js-signer",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "description": "This repository provides library to sign any arbitrary message with an Bullish R1 key and produce an Bullish signature",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
@@ -48,7 +48,7 @@
     "typescript": "^4.9.3"
   },
   "engines": {
-    "node": ">=16.0.0 <17.0.0",
+    "node": ">=16.0.0",
     "yarn": ">= 1.0.0",
     "npm": "Please use Yarn instead of NPM to install dependencies. See: https://yarnpkg.com/lang/en/docs/install/"
   },
