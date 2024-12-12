@@ -5,8 +5,7 @@ import { generateKeyPair } from './keyUtils'
 import { KeyType } from '../config'
 import { ALGORITHM_CURVE, ALGORITHM_NAME, KEY_USAGE } from '../constant'
 import { PrivateKey, Signature } from '../keys'
-
-const { subtle } = globalThis.crypto
+import { subtle } from '../subtle'
 
 describe('PrivateKey', () => {
   describe('secp256k1', () => {

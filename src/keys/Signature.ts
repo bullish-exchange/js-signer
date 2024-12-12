@@ -8,8 +8,7 @@ import { PublicKey } from './PublicKey'
 import { BufferEncoding, Key, KeyType } from '../config'
 import { ALGORITHM_HASH, ALGORITHM_NAME, ELLIPTIC_CURVE, ELLIPTIC_CURVE_K1, ERRORS } from '../constant'
 import { signatureToString, stringToSignature } from '../numeric'
-
-const { subtle } = globalThis.crypto
+import { subtle } from '../subtle'
 
 /** Represents/stores a Signature and provides easy conversion for use with `elliptic` lib */
 export class Signature implements AbstractSignature {

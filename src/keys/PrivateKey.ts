@@ -23,8 +23,7 @@ import {
   stringToArray,
   stringToPrivateKey,
 } from '../numeric'
-
-const { subtle } = globalThis.crypto
+import { subtle } from '../subtle'
 
 const DER_HEX_PREFIX = '308187020100301306072a8648ce3d020106082a8648ce3d030107046d306b0201010420'
 const DER_HEX_SEPERATOR = 'a144034200'
