@@ -166,9 +166,7 @@ export class PrivateKey implements AbstractPrivateKey {
 
     const algorithm: EcdsaParams = {
       name: ALGORITHM_NAME,
-      hash: {
-        name: ALGORITHM_HASH,
-      },
+      hash: ALGORITHM_HASH,
     }
 
     const webCryptoSig = await subtle.sign(algorithm, privWebCrypto, data)
