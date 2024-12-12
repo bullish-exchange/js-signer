@@ -28,17 +28,9 @@ export default {
       }),
   ],
   input: 'src/index.ts',
-  output: [
-    {
-      file: 'dist/index.cjs.js',
-      format: 'cjs',
-      sourcemap: true,
-    },
-    {
-      file: 'dist/index.js',
-      format: 'es',
-      sourcemap: true,
-    },
-    { file: 'dist/index.d.ts', format: 'es' },
-  ],
+  output: {
+    file: 'dist/index.js',
+    format: 'es',
+    sourcemap: true,
+  },
 }
