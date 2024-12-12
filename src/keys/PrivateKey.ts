@@ -23,14 +23,18 @@ import {
   stringToArray,
   stringToPrivateKey,
 } from '../numeric'
-import { subtle } from '../subtle'
+
+const { subtle } = globalThis.crypto
 
 const DER_HEX_PREFIX = '308187020100301306072a8648ce3d020106082a8648ce3d030107046d306b0201010420'
 const DER_HEX_SEPERATOR = 'a144034200'
 
 /** Represents/stores a private key and provides easy conversion for use with `elliptic` lib */
 export class PrivateKey implements AbstractPrivateKey {
-  constructor(private key: Key, private ec: EC) {}
+  constructor(
+    private key: Key,
+    private ec: EC
+  ) {}
 
   /** Instantiate private key from an `elliptic`-format private key */
   public static fromElliptic(privKey: EC.KeyPair, keyType: KeyType, ec?: EC): PrivateKey {

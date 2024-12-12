@@ -6,7 +6,8 @@ import { PublicKey } from './PublicKey'
 
 import { KeyType } from '../config'
 import { ALGORITHM_CURVE, ALGORITHM_NAME, ELLIPTIC_CURVE, KEY_USAGE } from '../constant'
-import { subtle } from '../subtle'
+
+const { subtle } = globalThis.crypto
 
 describe('Elliptic Curve Cryptography', () => {
   describe('secp256k1', () => {

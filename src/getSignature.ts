@@ -5,7 +5,8 @@
 
 import { ALGORITHM_HASH, ALGORITHM_NAME } from './constant'
 import { PrivateKey, PublicKey, Signature } from './keys'
-import { subtle } from './subtle'
+
+const { subtle } = globalThis.crypto
 
 /**
  * @description generates signature for a given payload using the keys provided

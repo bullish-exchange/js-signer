@@ -12,7 +12,8 @@ import {
   ERRORS,
   KEY_USAGE,
 } from '../constant'
-import { subtle } from '../subtle'
+
+const { subtle } = globalThis.crypto
 
 const DEFAULT_ALGORITHM: EcKeyGenParams = {
   name: ALGORITHM_NAME,
