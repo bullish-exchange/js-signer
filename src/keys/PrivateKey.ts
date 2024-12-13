@@ -30,7 +30,10 @@ const DER_HEX_SEPERATOR = 'a144034200'
 
 /** Represents/stores a private key and provides easy conversion for use with `elliptic` lib */
 export class PrivateKey implements AbstractPrivateKey {
-  constructor(private key: Key, private ec: EC) {}
+  constructor(
+    private key: Key,
+    private ec: EC
+  ) {}
 
   /** Instantiate private key from an `elliptic`-format private key */
   public static fromElliptic(privKey: EC.KeyPair, keyType: KeyType, ec?: EC): PrivateKey {
@@ -166,9 +169,7 @@ export class PrivateKey implements AbstractPrivateKey {
 
     const algorithm: EcdsaParams = {
       name: ALGORITHM_NAME,
-      hash: {
-        name: ALGORITHM_HASH,
-      },
+      hash: ALGORITHM_HASH,
     }
 
     const webCryptoSig = await subtle.sign(algorithm, privWebCrypto, data)

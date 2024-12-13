@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "esnext",
+    "target": "es2023",
     "module": "commonjs",
     "strict": true,
     "esModuleInterop": true,
@@ -16,5 +16,5 @@
     "noFallthroughCasesInSwitch": true,
     "moduleResolution": "node"
   },
-  "include": ["src/**/*"]
+  "include": ["rollup.config.mjs", "src/**/*"]
 }

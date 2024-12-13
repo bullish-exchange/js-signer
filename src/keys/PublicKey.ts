@@ -26,7 +26,10 @@ export const DER_HEX_PREFIX = '3059301306072a8648ce3d020106082a8648ce3d030107034
 
 /** Represents/stores a public key and provides easy conversion for use with `elliptic` lib */
 export class PublicKey implements AbstractPublicKey {
-  constructor(private key: Key, private ec: EC) {}
+  constructor(
+    private key: Key,
+    private ec: EC
+  ) {}
 
   /** Instantiate public key from an Bullish-format public key */
   public static fromString(publicKeyStr: string, ec?: EC): PublicKey {

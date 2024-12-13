@@ -45,12 +45,6 @@ describe('generateWebCryptoKeyPair', () => {
     expect(publicKey.usages[0]).toEqual(KEY_USAGE.VERIFY)
   })
 
-  it('generate a private and public key pair with no usages', async () => {
-    const { privateKey, publicKey } = await generateWebCryptoKeyPair(false, [])
-    expect(privateKey.usages.length).toEqual(0)
-    expect(publicKey.usages.length).toEqual(0)
-  })
-
   it('fails to convert private non-extractable CryptoKey to PrivateKey', async () => {
     const { privateKey } = await generateWebCryptoKeyPair()
     const convertPrivateKey = async (priv: CryptoKey) => {

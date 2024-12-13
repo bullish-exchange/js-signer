@@ -39,24 +39,17 @@
     }
   ],
   "ignorePatterns": ["dist/*"],
-  "env": { "es6": true, "node": true },
+  "env": { "es2023": true, "node": true },
   "rules": {
     "no-undef": "error",
-    "@typescript-eslint/no-duplicate-imports": "warn",
     "@typescript-eslint/no-use-before-define": "off",
     "@typescript-eslint/explicit-function-return-type": "off",
-    "@typescript-eslint/member-delimiter-style": [
-      "error",
-      {
-        "multiline": {
-          "delimiter": "none"
-        }
-      }
-    ],
+    "@typescript-eslint/no-unused-vars": ["error", { "caughtErrors": "none" }],
     "camelcase": "off",
     "semi": [2, "never"],
     "@typescript-eslint/camelcase": "off",
     "@typescript-eslint/explicit-module-boundary-types": "off",
+    "@typescript-eslint/no-unsafe-enum-comparison": "off",
     "@typescript-eslint/no-explicit-any": "off",
     "simple-import-sort/exports": "warn",
     "simple-import-sort/imports": [

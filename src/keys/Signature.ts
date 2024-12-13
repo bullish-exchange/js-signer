@@ -12,7 +12,10 @@ import { subtle } from '../subtle'
 
 /** Represents/stores a Signature and provides easy conversion for use with `elliptic` lib */
 export class Signature implements AbstractSignature {
-  constructor(private signature: Key, private ec: EC) {}
+  constructor(
+    private signature: Key,
+    private ec: EC
+  ) {}
 
   /** Instantiate Signature from an Bullish-format Signature */
   public static fromString(sig: string, ec?: EC): Signature {
@@ -33,8 +36,8 @@ export class Signature implements AbstractSignature {
     keyType: KeyType,
     ec?: EC
   ): Signature {
-    const r = ellipticSig.r.toArray('be', 32)
-    const s = ellipticSig.s.toArray('be', 32)
+    const r = (ellipticSig as EC.Signature).r.toArray('be', 32)
+    const s = (ellipticSig as EC.Signature).s.toArray('be', 32)
     const recoveryParam = ellipticSig.recoveryParam ?? 0
     let bullishRecoveryParam = 0
     if (keyType === KeyType.k1 || keyType === KeyType.r1) {
@@ -71,15 +74,20 @@ export class Signature implements AbstractSignature {
     const ec = new EC(ELLIPTIC_CURVE)
 
     const hash = await subtle.digest(ALGORITHM_HASH, data)
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-assignment
     const r = new BN(new Uint8Array(webCryptoSig.slice(0, 32)), 32)
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-assignment
     let s = new BN(new Uint8Array(webCryptoSig.slice(32)), 32)
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
     const halforder = ec.curve.n.ushrn(1) as BN // shift right 1 bit -- division by two
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
     if (s.ucmp(halforder) === 1) {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-assignment
       s = ec.curve.n.sub(s) as BN
     }
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const recoveryParam = this.getRecoveryParam(Buffer.from(hash), { r, s }, publicKey.toString(), ec)
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     return Signature.fromElliptic({ r, s, recoveryParam }, KeyType.r1, ec)
   }
 
@@ -114,7 +122,9 @@ export class Signature implements AbstractSignature {
   public toElliptic(): EC.SignatureOptions {
     const lengthOfR = 32
     const lengthOfS = 32
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-assignment
     const r = new BN(this.signature.data.slice(1, lengthOfR + 1))
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-assignment
     const s = new BN(this.signature.data.slice(lengthOfR + 1, lengthOfR + lengthOfS + 1))
 
     let ellipticRecoveryBitField = 0
@@ -127,6 +137,7 @@ export class Signature implements AbstractSignature {
       ellipticRecoveryBitField = this.signature.data[0]
     }
     const recoveryParam = ellipticRecoveryBitField & 3
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     return { r, s, recoveryParam }
   }
 
@@ -174,9 +185,7 @@ export class Signature implements AbstractSignature {
     return await subtle.verify(
       {
         name: ALGORITHM_NAME,
-        hash: {
-          name: ALGORITHM_HASH,
-        },
+        hash: ALGORITHM_HASH,
       },
       webCryptoPub,
       webCryptoSig,
