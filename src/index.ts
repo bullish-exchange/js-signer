@@ -1,4 +1,5 @@
 export { KeyType } from './config'
+export * from './constant'
 export { getSignature } from './getSignature'
 export {
   generateKeyPair,
