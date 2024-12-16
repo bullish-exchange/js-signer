@@ -214,7 +214,7 @@ export const stringToArray = (str: string): ArrayBuffer => {
   return buf
 }
 
-const digestSuffixRipemd160 = (data: Uint8Array, suffix: string): ArrayBuffer => {
+const digestSuffixRipemd160 = (data: Uint8Array, suffix: string) => {
   const d = new Uint8Array(data.length + suffix.length)
   for (let i = 0; i < data.length; ++i) {
     d[i] = data[i]

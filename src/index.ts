@@ -1,15 +1,6 @@
-export { KeyType } from './config'
+export * from './config'
 export * from './constant'
-export { getSignature } from './getSignature'
-export {
-  generateKeyPair,
-  generateWebCryptoKeyPair,
-  generateWebCryptoStringKeyPair,
-  getTypeFromPublicKeyString,
-  isPrivateKeyValid,
-  isPublicKeyValid,
-  PrivateKey,
-  PublicKey,
-  Signature,
-} from './keys'
-export { signData } from './signData'
+export * from './getSignature'
+export * from './keys'
+export * from './numeric'
+export * from './signData'
