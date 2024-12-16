@@ -7,5 +7,8 @@ export {
   getTypeFromPublicKeyString,
   isPrivateKeyValid,
   isPublicKeyValid,
+  PrivateKey,
+  PublicKey,
+  Signature,
 } from './keys'
 export { signData } from './signData'
